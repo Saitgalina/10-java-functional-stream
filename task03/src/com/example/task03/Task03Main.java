@@ -1,6 +1,8 @@
 package com.example.task03;
 
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
@@ -21,7 +23,27 @@ public class Task03Main {
             Stream<? extends T> stream,
             Comparator<? super T> order,
             BiConsumer<? super T, ? super T> minMaxConsumer) {
+        if (order == null || minMaxConsumer == null) {
+            throw new NullPointerException();
+        }
+        Iterator<? extends T> iterator = stream.iterator();
+        if (!iterator.hasNext()) {
+            minMaxConsumer.accept(null, null);
+            return;
+        }
+        T min = iterator.next();
+        T max = min;
 
-        // your implementation here
+        while (iterator.hasNext()) {
+            T current = iterator.next();
+            if (order.compare(min, current) > 0) {
+                min = current;
+            } else if (order.compare(max, current) < 0) {
+                max = current;
+            }
+        }
+        minMaxConsumer.accept(min,max);
+        return;
+
     }
 }
